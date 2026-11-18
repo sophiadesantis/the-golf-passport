@@ -1,0 +1,13 @@
+{
+  "name": "the-golf-passport",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A colorful local-first golf journal and bucket list",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check app.js && node --check data.js && node --check cloud.js && node --check server/worker.js && node --check server.mjs",
+    "build": "node scripts/build.mjs && node scripts/validate-build.mjs"
+  }
+}

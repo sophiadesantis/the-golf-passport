@@ -18,7 +18,7 @@ The app starts with empty personal lists. Decorative course artwork is illustrat
 
 ## Accounts and saving
 
-On the hosted Sites version, the platform’s **Sign in with ChatGPT** flow supplies authenticated identity to the Worker. Each signed-in account has a separate passport stored in a private R2 bucket. Photos are part of the saved passport. The app also keeps a browser copy in IndexedDB.
+The account backend is implemented for Sites hosting. The platform’s **Sign in with ChatGPT** flow supplies authenticated identity to the Worker. Each signed-in account has a separate passport stored in a private R2 bucket. Photos are part of the saved passport. Cloud mode does not keep a separate persistent browser backup; use **Export a passport backup** when you want an additional copy.
 
 The browser never receives a public R2 object URL or storage key. The server derives a storage key from the account identity. Same-origin write checks and conditional revisions prevent cross-site changes and detect concurrent edits from another device. A conflict requires loading the latest passport before saving again. The maximum synced passport is 16 MB; export backups and remove photos if you reach this limit.
 
@@ -46,7 +46,11 @@ node scripts/validate-build.mjs
 
 The build writes a self-contained ESM Worker to `dist/server/index.js`. It combines the strict data validation rules, account API, and an explicit allowlist of public frontend files. It also copies `.openai/hosting.json` into `dist/.openai/hosting.json`. It does not copy private records or browser storage. The validation script checks exact asset responses, API authentication rejection, non-public source routes, recognizable credential patterns, and matching hosting configuration.
 
-For Sites publication, preserve the existing `project_id` in `.openai/hosting.json` and declare the private R2 binding as `BUCKET`. Sites must provision that binding and provide the native identity layer. Package and publish through the Sites source workflow; do not publish the source tree itself as a static directory. This repository does not contain a public deployment URL or claim that deployment has been completed.
+The private account-based site is deployed at [The Golf Passport](https://the-golf-passport-sophia.ruby-kiwi-9543.chatgpt.site). Sign in with the owner’s ChatGPT account to use it on another device. The site currently has owner-only access; broader sharing has not been enabled.
+
+For future Sites publication, preserve the existing `project_id` in `.openai/hosting.json` and the private R2 binding `BUCKET`. Publish through the Sites source workflow. GitHub holds the application source and automated checks; GitHub Pages alone cannot run the account backend.
+
+**Verification:** 22 automated data, API, and sync-client tests passed. The packaged Worker passed 55 checks. The hosting platform confirmed successful deployment. The local mobile layout and initial connection flow were inspected. A real two-device sign-in and photo-sync session has not been independently verified.
 
 ## Project files
 
